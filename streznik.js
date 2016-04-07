@@ -3,6 +3,7 @@ var fs  = require('fs');
 var path = require('path');
 var mime = require('mime');
 var predpomnilnik = {};
+predloga = "";
 
 function posredujNapako404(odgovor) {
   odgovor.writeHead(404, {'Content-Type': 'text/plain'});
