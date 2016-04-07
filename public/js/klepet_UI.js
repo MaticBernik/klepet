@@ -28,7 +28,6 @@ function procesirajVnosUporabnika(klepetApp, socket) {
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
     $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
   }
-
   sporociloTokens = sporocilo.split(" ");
   for(var i=0;i<sporociloTokens.length;i++){
     var dolzina=sporociloTokens[i].length;
@@ -85,7 +84,6 @@ $(document).ready(function() {
   socket.on('sporocilo', function (sporocilo) {
     var novElement = divElementEnostavniTekst(sporocilo.besedilo);
     $('#sporocila').append(novElement);
-    
     sporociloTokens = sporocilo.besedilo.split(" ");
     for(var i=0;i<sporociloTokens.length;i++){
      var dolzina=sporociloTokens[i].length;
