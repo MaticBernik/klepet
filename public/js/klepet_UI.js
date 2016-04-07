@@ -15,8 +15,8 @@ function divElementHtmlTekst(sporocilo) {
 function procesirajVnosUporabnika(klepetApp, socket) {
   var sporocilo = $('#poslji-sporocilo').val();
   sporocilo = dodajSmeske(sporocilo);
+  
   var sistemskoSporocilo;
-
   if (sporocilo.charAt(0) == '/') {
     sistemskoSporocilo = klepetApp.procesirajUkaz(sporocilo);
     if (sistemskoSporocilo) {
@@ -27,6 +27,15 @@ function procesirajVnosUporabnika(klepetApp, socket) {
     klepetApp.posljiSporocilo(trenutniKanal, sporocilo);
     $('#sporocila').append(divElementEnostavniTekst(sporocilo));
     $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
+  }
+
+  sporociloTokens = sporocilo.split(" ");
+  for(var i=0;i<sporociloTokens.length;i++){
+    var dolzina=sporociloTokens[i].length;
+    if((sporociloTokens[i].substring(0,7)=="http://" || sporociloTokens[i].substring(0,8)=="https://") && (sporociloTokens[i].substring(dolzina-4,dolzina)==".jpg" || sporociloTokens[i].substring(dolzina-4,dolzina)==".png" || sporociloTokens[i].substring(dolzina-4,dolzina)==".gif")){
+      var slikaHtml = "<img src=\""+sporociloTokens[i]+"\" width=\"200\" hspace=\"20\">";
+      $("#sporocila").html($("#sporocila").html()+slikaHtml);
+    }
   }
 
   $('#poslji-sporocilo').val('');
@@ -76,6 +85,16 @@ $(document).ready(function() {
   socket.on('sporocilo', function (sporocilo) {
     var novElement = divElementEnostavniTekst(sporocilo.besedilo);
     $('#sporocila').append(novElement);
+    
+    sporociloTokens = sporocilo.besedilo.split(" ");
+    for(var i=0;i<sporociloTokens.length;i++){
+     var dolzina=sporociloTokens[i].length;
+      if((sporociloTokens[i].substring(0,7)=="http://" || sporociloTokens[i].substring(0,8)=="https://") && (sporociloTokens[i].substring(dolzina-4,dolzina)==".jpg" || sporociloTokens[i].substring(dolzina-4,dolzina)==".png" || sporociloTokens[i].substring(dolzina-4,dolzina)==".gif")){
+       var slikaHtml = "<img src=\""+sporociloTokens[i]+"\" width=\"200\" hspace=\"20\">";
+       $("#sporocila").html($("#sporocila").html()+slikaHtml);
+     }
+   }
+
   });
   
   socket.on('kanali', function(kanali) {
