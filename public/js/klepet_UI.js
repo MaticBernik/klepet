@@ -14,11 +14,13 @@ function divElementHtmlTekst(sporocilo) {
 
 function procesirajVnosUporabnika(klepetApp, socket) {
   var sporocilo = $('#poslji-sporocilo').val();
+  console.log("Sporocilo --> "+sporocilo);
   sporocilo = dodajSmeske(sporocilo);
   var sistemskoSporocilo;
 
   if (sporocilo.charAt(0) == '/') {
     sistemskoSporocilo = klepetApp.procesirajUkaz(sporocilo);
+    console.log("SistemeskoSporocilo --> "+sistemskoSporocilo);
     if (sistemskoSporocilo) {
       $('#sporocila').append(divElementHtmlTekst(sistemskoSporocilo));
     }
@@ -99,6 +101,12 @@ $(document).ready(function() {
     for (var i=0; i < uporabniki.length; i++) {
       $('#seznam-uporabnikov').append(divElementEnostavniTekst(uporabniki[i]));
     }
+    
+    $('#seznam-uporabnikov div').click(function(event) {
+      predloga = "/zasebno \""+$(event.target).text()+"\"";
+      $('#poslji-sporocilo').val(predloga);
+      $('#poslji-sporocilo').focus();
+    });
   });
 
   setInterval(function() {
