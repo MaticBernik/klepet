@@ -31,14 +31,17 @@ function procesirajVnosUporabnika(klepetApp, socket) {
     $('#sporocila').scrollTop($('#sporocila').prop('scrollHeight'));
   }
   sporociloTokens = sporocilo.split(" ");
+  
   for(var i=0;i<sporociloTokens.length;i++){
     var dolzina=sporociloTokens[i].length;
-    if((sporociloTokens[i].substring(0,7)=="http://" || sporociloTokens[i].substring(0,8)=="https://") && (sporociloTokens[i].substring(dolzina-4,dolzina)==".jpg" || sporociloTokens[i].substring(dolzina-4,dolzina)==".png" || sporociloTokens[i].substring(dolzina-4,dolzina)==".gif")){
+    if(dolzina>7 && (sporociloTokens[i].substring(0,7)=="http://" || sporociloTokens[i].substring(0,8)=="https://") && (sporociloTokens[i].substring(dolzina-4,dolzina)==".jpg" || sporociloTokens[i].substring(dolzina-4,dolzina)==".png" || sporociloTokens[i].substring(dolzina-4,dolzina)==".gif")){
       var slikaHtml = "<img src=\""+sporociloTokens[i]+"\" width=\"200\" hspace=\"20\">";
+      $("#sporocila").html($("#sporocila").html()+slikaHtml);
+    }else if(dolzina>32 && (sporociloTokens[i].substring(0,32)=="https://www.youtube.com/watch?v=")){
+      var slikaHtml = "<iframe src=\"https://www.youtube.com/embed/"+sporociloTokens[i].substring(32,dolzina)+"\" height=\"150\" width=\"200\" hspace=\"20\" allowfullscreen></iframe>";
       $("#sporocila").html($("#sporocila").html()+slikaHtml);
     }
   }
-
   $('#poslji-sporocilo').val('');
 }
 
@@ -86,15 +89,17 @@ $(document).ready(function() {
   socket.on('sporocilo', function (sporocilo) {
     var novElement = divElementEnostavniTekst(sporocilo.besedilo);
     $('#sporocila').append(novElement);
-    sporociloTokens = sporocilo.besedilo.split(" ");
+    var sporociloTokens = sporocilo.besedilo.split(" ");
     for(var i=0;i<sporociloTokens.length;i++){
      var dolzina=sporociloTokens[i].length;
-      if((sporociloTokens[i].substring(0,7)=="http://" || sporociloTokens[i].substring(0,8)=="https://") && (sporociloTokens[i].substring(dolzina-4,dolzina)==".jpg" || sporociloTokens[i].substring(dolzina-4,dolzina)==".png" || sporociloTokens[i].substring(dolzina-4,dolzina)==".gif")){
+      if(dolzina>7 && (sporociloTokens[i].substring(0,7)=="http://" || sporociloTokens[i].substring(0,8)=="https://") && (sporociloTokens[i].substring(dolzina-4,dolzina)==".jpg" || sporociloTokens[i].substring(dolzina-4,dolzina)==".png" || sporociloTokens[i].substring(dolzina-4,dolzina)==".gif")){
        var slikaHtml = "<img src=\""+sporociloTokens[i]+"\" width=\"200\" hspace=\"20\">";
        $("#sporocila").html($("#sporocila").html()+slikaHtml);
-     }
+     }else if(dolzina>32 && (sporociloTokens[i].substring(0,32)=="https://www.youtube.com/watch?v=")){
+       var slikaHtml = "<iframe src=\"https://www.youtube.com/embed/"+sporociloTokens[i].substring(32,dolzina)+"\" height=\"150\" width=\"200\" hspace=\"20\" allowfullscreen></iframe>";
+       $("#sporocila").html($("#sporocila").html()+slikaHtml);
+      }
    }
-
   });
   
   socket.on('kanali', function(kanali) {
