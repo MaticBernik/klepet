@@ -118,6 +118,17 @@ $(document).ready(function() {
     });
   });
 
+  socket.on('dregljaj',function(dregljaj){
+    if(dregljaj.dregljaj){
+      var okno = $("#vsebina");
+      okno.jrumble();
+      okno.trigger('startRumble');
+      setTimeout(function(){
+        okno.trigger('stopRumble');
+      },1500);
+    }
+  });
+  
   socket.on('uporabniki', function(uporabniki) {
     $('#seznam-uporabnikov').empty();
     for (var i=0; i < uporabniki.length; i++) {
